@@ -19,6 +19,8 @@ public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpa
         super(roleJpaRepository);
     }
 
+    public RolePermissionJpaRepository rolePermissionJpaRepository;
+
     @Override
     protected RoleJpaEntity mapToJpaEntity(Role domain) {
         return new RoleJpaEntity(domain.getId().getValue(), domain.getName(), domain.getPermissionSet().stream().map(PermissionId::getValue).collect(Collectors.toSet()));
