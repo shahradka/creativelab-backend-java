@@ -1,6 +1,7 @@
 package top.creativelab.role.adapters.inbound.rest.role;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class RoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RoleResponse create(@RequestBody @Valid CreateUpdateRoleRequest roleRequest){
+    public RoleResponse create(@RequestBody @Valid CreateRoleRequest roleRequest){
         Set<PermissionId> permissionIds = roleRequest.permissionIdSet() !=null? roleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) :
                 Collections.emptySet();
         return RoleResponse.from(roleUseCase.create(roleRequest.name(), permissionIds));
@@ -28,11 +29,11 @@ public class RoleController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RoleResponse update(@PathVariable UUID id, @RequestBody @Valid CreateUpdateRoleRequest createUpdateRoleRequest){
+    public RoleResponse update(@PathVariable @NotNull UUID id, @RequestBody @Valid UpdateRoleRequest updateRoleRequest){
         RoleId roleId = new RoleId(id);
-        Set<PermissionId> permissionIdSet = createUpdateRoleRequest.permissionIdSet() != null? createUpdateRoleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) :
+        Set<PermissionId> permissionIdSet = updateRoleRequest.permissionIdSet() != null? updateRoleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) :
                 Collections.emptySet();
-        return RoleResponse.from(roleUseCase.update(roleId, createUpdateRoleRequest.name(), permissionIdSet));
+        return RoleResponse.from(roleUseCase.update(roleId, updateRoleRequest.name(), permissionIdSet));
     }
 
     @GetMapping("/{id}")

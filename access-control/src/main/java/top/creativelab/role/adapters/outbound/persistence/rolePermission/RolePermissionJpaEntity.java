@@ -5,7 +5,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import persistance.JpaEntityBaseModel;
+import top.creativelab.role.adapters.outbound.persistence.permission.PermissionJpaEntity;
+import top.creativelab.role.adapters.outbound.persistence.role.RoleJpaEntity;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -14,15 +17,17 @@ import java.util.UUID;
 @Table(name = "roles_permissions")
 public class RolePermissionJpaEntity extends JpaEntityBaseModel {
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "roles_id")
+    private RoleJpaEntity roleJpaEntity;
+
     @Column(name = "permissions_id", nullable = false)
     private UUID permissionId;
 
-    @Column(name = "roles_id", nullable = false)
-    private UUID rolesId;
-
-    RolePermissionJpaEntity(UUID id, UUID permissionId, UUID rolesId){
-        super(id);
+    public RolePermissionJpaEntity(UUID id, UUID permissionId, RoleJpaEntity roleJpaEntity){
         this.permissionId = permissionId;
-        this.rolesId = rolesId;
+        this.roleJpaEntity = roleJpaEntity;
+        super(id);
     }
+
 }

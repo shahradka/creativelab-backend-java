@@ -1,5 +1,6 @@
 package top.creativelab.role.applications;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import top.creativelab.role.applications.exceptions.PermissionNotFoundException;
@@ -13,6 +14,7 @@ import top.creativelab.role.ports.outbound.RoleRepository;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,22 +31,19 @@ public class RoleService implements RoleUseCase {
     }
 
     @Override
+    @Transactional
     public Role update(RoleId roleId, String name, Set<PermissionId> permissionIds) {
-        if(!repository.isExistById(roleId)){
-            throw new RoleNotFoundException(roleId.getValue());
-        }
+        Role modifiedRole = repository.findById(roleId)
+                .orElseThrow(() -> new RoleNotFoundException(roleId.getValue()));
 
-        permissionIds.forEach((id) -> {
-                if(!permissionRepository.isExistById(id)){
-                    throw new PermissionNotFoundException(id.getValue());
-                }
-        });
+        Set<PermissionId> validPermissionIds = permissionIds.stream()
+                .filter(permissionRepository::isExistById)
+                .collect(Collectors.toSet());
 
-        Role modifiedRole = new Role(roleId, name, permissionIds);
+        modifiedRole.updatePermissions(validPermissionIds);
+        modifiedRole.updateName(name);
 
-        repository.save(modifiedRole);
-
-        return modifiedRole;
+        return repository.update(modifiedRole);
     }
 
     @Override

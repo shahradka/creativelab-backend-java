@@ -28,7 +28,7 @@ public class PermissionService implements PermissionUseCase {
         if(name.isBlank())
             throw new IllegalArgumentException("Permission name can't be empty");
         ActionId actionId = new ActionId(actionUUIDId);
-        if(actionRepository.isExistById(actionId))
+        if(!actionRepository.isExistById(actionId))
             throw new IllegalArgumentException("ActionId isn't valid");
         ResourceId resourceId = new ResourceId(resourceUUIDId);
         if(!resourceRepository.isExistsById(resourceId))

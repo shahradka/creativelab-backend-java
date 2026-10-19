@@ -19,28 +19,26 @@ public class PermissionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PermissionResponse createPermission(@RequestBody @Valid CreatePermissionRequest createPermissionRequest,
-                                       UUID resourceId, UUID actionId){
-        return PermissionResponse.from(permissionUseCase.create(createPermissionRequest.name(), resourceId, actionId));
+    public PermissionResponse createPermission(@RequestBody @Valid CreatePermissionRequest createPermissionRequest) {
+        return PermissionResponse.from(permissionUseCase.create(createPermissionRequest.name(), createPermissionRequest.resourceId(), createPermissionRequest.actionId()));
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<PermissionResponse> getAll(){
+    public List<PermissionResponse> getAll() {
         return permissionUseCase.findAll().stream().map(PermissionResponse::from).toList();
     }
 
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PermissionResponse getById(@PathVariable @Valid UUID id){
+    public PermissionResponse getById(@PathVariable @Valid UUID id) {
         return PermissionResponse.from(permissionUseCase.findById(id));
     }
 
     @GetMapping("/name/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public List<PermissionResponse> getById(@PathVariable @Valid String name){
+    public List<PermissionResponse> getById(@PathVariable @Valid String name) {
         return permissionUseCase.findByName(name).stream().map(PermissionResponse::from).toList();
     }
 

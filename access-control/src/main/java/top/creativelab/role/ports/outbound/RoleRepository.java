@@ -12,4 +12,5 @@ public interface RoleRepository {
     boolean isExistById(RoleId roleId);
     void delete(RoleId roleId);
     List<Role> findByName(String name);
+    Role update(Role role);
 }

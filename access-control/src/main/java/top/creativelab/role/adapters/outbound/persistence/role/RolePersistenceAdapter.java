@@ -1,15 +1,18 @@
 package top.creativelab.role.adapters.outbound.persistence.role;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import persistance.BasePersistenceAdapter;
+import top.creativelab.role.adapters.outbound.persistence.permission.PermissionJpaEntity;
+import top.creativelab.role.adapters.outbound.persistence.rolePermission.RolePermissionJpaEntity;
+import top.creativelab.role.applications.exceptions.RoleNotFoundException;
 import top.creativelab.role.domain.Role;
 import top.creativelab.role.domain.vo.PermissionId;
 import top.creativelab.role.domain.vo.RoleId;
+import top.creativelab.role.ports.outbound.PermissionRepository;
 import top.creativelab.role.ports.outbound.RoleRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -19,11 +22,12 @@ public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpa
         super(roleJpaRepository);
     }
 
-    public RolePermissionJpaRepository rolePermissionJpaRepository;
-
     @Override
     protected RoleJpaEntity mapToJpaEntity(Role domain) {
-        return new RoleJpaEntity(domain.getId().getValue(), domain.getName(), domain.getPermissionSet().stream().map(PermissionId::getValue).collect(Collectors.toSet()));
+
+        Set<UUID> newPermissionIds = domain.getPermissionSet() != null ?domain.getPermissionSet().stream().map(PermissionId::getValue).collect(Collectors.toSet()) : Collections.emptySet();
+        return new RoleJpaEntity(domain.getId().getValue(), domain.getName(), newPermissionIds);
+
     }
 
     @Override
@@ -49,4 +53,18 @@ public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpa
     public void delete(RoleId roleId) {
         repository.deleteById(roleId.getValue());
     }
+
+    @Transactional
+    public Role update(Role role){
+
+        RoleJpaEntity modifiedJpaRole = repository.findById(role.getId().getValue()).orElseThrow(() -> new RoleNotFoundException(role.getId().getValue()));
+        modifiedJpaRole.updateName(role.getName());
+        modifiedJpaRole.syncPermissions(role.getPermissionSet().stream().map(PermissionId::getValue).collect(Collectors.toSet()));
+
+        repository.save(modifiedJpaRole);
+
+        return mapToDomain(modifiedJpaRole);
+    }
+
+
 }

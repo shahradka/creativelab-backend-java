@@ -23,8 +23,12 @@ public class RoleJpaEntity extends JpaEntityBaseModel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "roles_id")
+    @OneToMany(
+            mappedBy = "roleJpaEntity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private final Set<RolePermissionJpaEntity> rolesPermissionsJpaEntityList = new HashSet<>();
 
     public Set<UUID> getPermissionIds() {
@@ -34,5 +38,26 @@ public class RoleJpaEntity extends JpaEntityBaseModel {
     public RoleJpaEntity(UUID id, String name, Set<UUID> permissionIds) {
         super(id);
         this.name = name;
+        this.syncPermissions(permissionIds);
     }
+
+    public void updateName(String name){
+        this.name = name;
+    }
+
+    public void syncPermissions(Set<UUID> permissionIds){
+
+        this.rolesPermissionsJpaEntityList.removeIf((rolePermissionJpaEntity) -> !permissionIds.contains(rolePermissionJpaEntity.getPermissionId()));
+
+        Set<UUID> desiredIds = new HashSet<>(permissionIds);
+
+        Set<UUID> existingIds = this.getPermissionIds();
+
+        desiredIds.stream().filter((permissionId) ->
+                !existingIds.contains(permissionId)).forEach((id) ->
+                rolesPermissionsJpaEntityList.add(new RolePermissionJpaEntity(UUID.randomUUID(), id, this)));
+
+    }
+
+
 }
