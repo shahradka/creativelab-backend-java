@@ -25,9 +25,9 @@ public class RolePermissionJpaEntity extends JpaEntityBaseModel {
     private UUID permissionId;
 
     public RolePermissionJpaEntity(UUID id, UUID permissionId, RoleJpaEntity roleJpaEntity) {
+        super(id); // Add this line to call the superclass constructor
         this.permissionId = permissionId;
         this.roleJpaEntity = roleJpaEntity;
-        super(id);
     }
 
 }

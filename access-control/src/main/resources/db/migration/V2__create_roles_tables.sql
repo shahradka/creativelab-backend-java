@@ -26,8 +26,3 @@ CREATE TABLE roles
         FOREIGN KEY (permissions_roles_id)
             REFERENCES roles_permissions(id)
 );
-
-ALTER TABLE roles_permissions
-    ADD CONSTRAINT fk_rp_roles
-        FOREIGN KEY (roles_id)
-            REFERENCES roles(id);
