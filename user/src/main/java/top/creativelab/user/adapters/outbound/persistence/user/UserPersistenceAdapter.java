@@ -2,41 +2,28 @@ package top.creativelab.user.adapters.outbound.persistence.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import persistance.BasePersistenceAdapter;
 import top.creativelab.user.domain.user.User;
 import top.creativelab.user.domain.user.vo.Password;
 import top.creativelab.user.domain.user.vo.UserId;
 import top.creativelab.user.ports.outbound.user.UserRepository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
-public class UserPersistenceAdapter implements UserRepository {
+public class UserPersistenceAdapter extends BasePersistenceAdapter<User, UserJpaEntity, UUID> implements UserRepository {
 
-    private final UserJpaRepository jpaRepository;
 
-    @Override
-    public void save(User user) {
-        jpaRepository.save(mapToUserJpaEntity(user));
+    public UserPersistenceAdapter(UserJpaRepository userJpaRepository){
+        super(userJpaRepository);
     }
-
-    @Override
-    public boolean existsByUsername(String username) {
-        return jpaRepository.existsByUsername(username);
-    }
-
-    @Override
-    public Optional<User> findUserByUsername(String username) {
-        return jpaRepository
-        .findByUsername(username)
-        .map(this::mapToDomain);
-    }
-
     // =====================
     // Mapping
     // =====================
 
-    private UserJpaEntity mapToUserJpaEntity(User user) {
+    public UserJpaEntity mapToJpaEntity(User user) {
         return new UserJpaEntity(
                 user.getId().getValue(),
                 user.getUsername(),
@@ -45,11 +32,24 @@ public class UserPersistenceAdapter implements UserRepository {
         );
     }
 
-    private User mapToDomain(UserJpaEntity entity) {
+
+    public User mapToDomain(UserJpaEntity entity) {
         return new User(
                 new UserId(entity.getId()),
                 entity.getUsername(),
-                Password.fromHash(entity.getHashedPassword())
+                Password.fromHash(entity.getPassword()),
+                entity.getFirstname(),
+                entity.getLastname()
         );
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return ((UserJpaRepository) repository).existsByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findUserByUsername(String username) {
+        return Optional.empty();
     }
 }
