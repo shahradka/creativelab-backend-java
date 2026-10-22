@@ -9,7 +9,6 @@ import top.creativelab.role.applications.exceptions.RoleNotFoundException;
 import top.creativelab.role.domain.Role;
 import top.creativelab.role.domain.vo.PermissionId;
 import top.creativelab.role.domain.vo.RoleId;
-import top.creativelab.role.ports.outbound.PermissionRepository;
 import top.creativelab.role.ports.outbound.RoleRepository;
 
 import java.util.*;
