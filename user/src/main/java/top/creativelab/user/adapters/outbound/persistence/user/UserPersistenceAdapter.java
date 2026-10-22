@@ -50,6 +50,6 @@ public class UserPersistenceAdapter extends BasePersistenceAdapter<User, UserJpa
 
     @Override
     public Optional<User> findUserByUsername(String username) {
-        return Optional.empty();
+        return ((UserJpaRepository) repository).findByUsername(username).map(this::mapToDomain);
     }
 }

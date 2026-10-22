@@ -38,7 +38,7 @@ public class PermissionController {
 
     @GetMapping("/name/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public List<PermissionResponse> getById(@PathVariable @Valid String name) {
+    public List<PermissionResponse> getByName(@PathVariable @Valid String name) {
         return permissionUseCase.findByName(name).stream().map(PermissionResponse::from).toList();
     }
 

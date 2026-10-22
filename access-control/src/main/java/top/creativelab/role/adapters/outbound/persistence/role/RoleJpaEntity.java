@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import persistance.JpaEntityBaseModel;
 import top.creativelab.role.adapters.outbound.persistence.rolePermission.RolePermissionJpaEntity;
+import top.creativelab.role.domain.Role;
 import top.creativelab.role.domain.vo.PermissionId;
+import top.creativelab.role.domain.vo.RoleId;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -57,6 +59,14 @@ public class RoleJpaEntity extends JpaEntityBaseModel {
                 !existingIds.contains(permissionId)).forEach((id) ->
                 rolesPermissionsJpaEntityList.add(new RolePermissionJpaEntity(UUID.randomUUID(), id, this)));
 
+    }
+
+    public Role toDomain() {
+        return new Role(
+                new RoleId(this.getId()),
+                this.name,
+                this.getPermissionIds().stream().map(PermissionId::new).collect(Collectors.toSet())
+        );
     }
 
 
