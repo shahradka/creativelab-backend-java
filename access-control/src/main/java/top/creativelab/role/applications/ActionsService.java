@@ -26,7 +26,6 @@ public class ActionsService implements ActionUseCase {
         return repository.findAll();
     }
 
-
     @Override
     public Action findById(UUID id) {
         ActionId actionId = new ActionId(id);
@@ -35,7 +34,7 @@ public class ActionsService implements ActionUseCase {
 
     @Override
     public Action update(UUID id, String actionName) {
-        if(id == null)
+        if (id == null)
             throw new IllegalArgumentException("Action id is not valid");
 
         ActionId actionId = new ActionId(id);

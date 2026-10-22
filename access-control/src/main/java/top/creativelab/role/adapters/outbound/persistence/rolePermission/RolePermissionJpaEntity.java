@@ -24,7 +24,7 @@ public class RolePermissionJpaEntity extends JpaEntityBaseModel {
     @Column(name = "permissions_id", nullable = false)
     private UUID permissionId;
 
-    public RolePermissionJpaEntity(UUID id, UUID permissionId, RoleJpaEntity roleJpaEntity){
+    public RolePermissionJpaEntity(UUID id, UUID permissionId, RoleJpaEntity roleJpaEntity) {
         this.permissionId = permissionId;
         this.roleJpaEntity = roleJpaEntity;
         super(id);

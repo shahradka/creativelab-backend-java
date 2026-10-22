@@ -22,8 +22,7 @@ public class RoleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RoleResponse create(@RequestBody @Valid CreateRoleRequest roleRequest){
-        Set<PermissionId> permissionIds = roleRequest.permissionIdSet() !=null? roleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) :
-                Collections.emptySet();
+        Set<PermissionId> permissionIds = roleRequest.permissionIdSet() != null ? roleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) : Collections.emptySet();
         return RoleResponse.from(roleUseCase.create(roleRequest.name(), permissionIds));
     }
 
@@ -31,8 +30,7 @@ public class RoleController {
     @ResponseStatus(HttpStatus.OK)
     public RoleResponse update(@PathVariable @NotNull UUID id, @RequestBody @Valid UpdateRoleRequest updateRoleRequest){
         RoleId roleId = new RoleId(id);
-        Set<PermissionId> permissionIdSet = updateRoleRequest.permissionIdSet() != null? updateRoleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) :
-                Collections.emptySet();
+        Set<PermissionId> permissionIdSet = updateRoleRequest.permissionIdSet() != null ? updateRoleRequest.permissionIdSet().stream().map(PermissionId::new).collect(Collectors.toSet()) : Collections.emptySet();
         return RoleResponse.from(roleUseCase.update(roleId, updateRoleRequest.name(), permissionIdSet));
     }
 

@@ -1,6 +1,5 @@
 package top.creativelab.role.adapters.outbound.persistence.permission;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -30,7 +29,7 @@ public class PermissionJpaEntity extends JpaEntityBaseModel {
     public UUID resourceId;
 
     @Builder
-    PermissionJpaEntity(UUID id, String name, UUID actionId, UUID resourceId){
+    PermissionJpaEntity(UUID id, String name, UUID actionId, UUID resourceId) {
         super(id);
         this.name = name;
         this.actionId = actionId;

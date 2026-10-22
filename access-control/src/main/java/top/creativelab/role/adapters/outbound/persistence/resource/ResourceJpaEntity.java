@@ -20,7 +20,7 @@ public class ResourceJpaEntity extends JpaEntityBaseModel {
     @Column(nullable = false)
     private String name;
 
-    public ResourceJpaEntity(UUID id, String name){
+    public ResourceJpaEntity(UUID id, String name) {
         super(id);
         this.name = name;
     }

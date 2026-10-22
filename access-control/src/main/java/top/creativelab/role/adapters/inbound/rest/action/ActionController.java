@@ -26,30 +26,30 @@ public class ActionController {
     }
 
     @PutMapping("/{id}")
-    public ActionResponse updateAction(@PathVariable UUID id,@RequestBody @Valid UpdateActionRequest updateActionRequest ){
+    public ActionResponse updateAction(@PathVariable UUID id, @RequestBody @Valid UpdateActionRequest updateActionRequest) {
         return ActionResponse.from(actionUseCase.update(id, updateActionRequest.actionName()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAction(@PathVariable @Valid UUID id){
+    public ResponseEntity<Void> deleteAction(@PathVariable @Valid UUID id) {
         actionUseCase.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ActionResponse> getAll(){
+    public List<ActionResponse> getAll() {
         return actionUseCase.findAll().stream().map(ActionResponse::from).toList();
     }
 
     @GetMapping("/{id}")
-    public ActionResponse getById(@PathVariable @Valid UUID id){
+    public ActionResponse getById(@PathVariable @Valid UUID id) {
         return ActionResponse.from(actionUseCase.findById(id));
     }
 
     @GetMapping("/name/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public ActionResponse getByName(@PathVariable String name){
+    public ActionResponse getByName(@PathVariable String name) {
         return ActionResponse.from(actionUseCase.findByName(name));
     }
 }

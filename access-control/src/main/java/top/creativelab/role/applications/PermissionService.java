@@ -25,15 +25,14 @@ public class PermissionService implements PermissionUseCase {
 
     @Override
     public Permission create(String name, UUID resourceUUIDId, UUID actionUUIDId) {
-        if(name.isBlank())
+        if (name.isBlank())
             throw new IllegalArgumentException("Permission name can't be empty");
         ActionId actionId = new ActionId(actionUUIDId);
-        if(!actionRepository.isExistById(actionId))
+        if (!actionRepository.isExistById(actionId))
             throw new IllegalArgumentException("ActionId isn't valid");
         ResourceId resourceId = new ResourceId(resourceUUIDId);
-        if(!resourceRepository.isExistsById(resourceId))
+        if (!resourceRepository.isExistsById(resourceId))
             throw new IllegalArgumentException("ResourceId isn't valid");
-
 
         return repository.save(new Permission(PermissionId.newId(), name, resourceId, actionId));
     }
@@ -45,7 +44,6 @@ public class PermissionService implements PermissionUseCase {
 
     @Override
     public Permission findById(UUID id) {
-
         PermissionId permissionId = new PermissionId(id);
         return repository.findById(permissionId).orElseThrow(() -> new PermissionNotFoundException(permissionId.getValue()));
     }
@@ -55,17 +53,15 @@ public class PermissionService implements PermissionUseCase {
         return repository.findAll();
     }
 
-
     @Override
     public Permission update(UUID id, Permission permission) {
-
         PermissionId permissionId = new PermissionId(id);
 
-        if(!repository.isExistById(permissionId))
+        if (!repository.isExistById(permissionId))
             throw new PermissionNotFoundException(permissionId.getValue());
 
         Permission modifiedPermission = repository.findById(permissionId).orElseThrow(
-                ()-> new PermissionNotFoundException(permissionId.getValue())
+                () -> new PermissionNotFoundException(permissionId.getValue())
         );
 
         modifiedPermission.update(permission.getName(), permission.getResourceId(), permission.getActionId());
@@ -78,7 +74,7 @@ public class PermissionService implements PermissionUseCase {
     @Override
     public void delete(UUID id) {
         PermissionId permissionId = new PermissionId(id);
-        if(!repository.isExistById(permissionId))
+        if (!repository.isExistById(permissionId))
             throw new PermissionNotFoundException(permissionId.getValue());
         repository.delete(permissionId);
     }

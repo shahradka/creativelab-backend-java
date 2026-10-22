@@ -24,14 +24,13 @@ public class PermissionPersistenceAdapter extends BasePersistenceAdapter<Permiss
 
     @Override
     public List<Permission> findByName(String name) {
-        return  ((PermissionJpaRepository)repository).findByNameContainingIgnoreCase(name).stream().map(this::mapToDomain).toList();
+        return ((PermissionJpaRepository) repository).findByNameContainingIgnoreCase(name).stream().map(this::mapToDomain).toList();
     }
 
     @Override
     public Optional<Permission> findById(PermissionId permissionId) {
         return super.findById(permissionId.getValue());
     }
-
 
     @Override
     public boolean isExistById(PermissionId permissionId) {
@@ -49,10 +48,10 @@ public class PermissionPersistenceAdapter extends BasePersistenceAdapter<Permiss
 
     protected PermissionJpaEntity mapToJpaEntity(Permission permission) {
         return new PermissionJpaEntity(
-            permission.getPermissionId().getValue(),
-            permission.getName(),
-            permission.getActionId().getValue(),
-            permission.getResourceId().getValue()
+                permission.getPermissionId().getValue(),
+                permission.getName(),
+                permission.getActionId().getValue(),
+                permission.getResourceId().getValue()
         );
     }
 

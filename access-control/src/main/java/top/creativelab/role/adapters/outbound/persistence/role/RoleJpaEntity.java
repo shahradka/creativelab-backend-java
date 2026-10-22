@@ -43,11 +43,11 @@ public class RoleJpaEntity extends JpaEntityBaseModel {
         this.syncPermissions(permissionIds);
     }
 
-    public void updateName(String name){
+    public void updateName(String name) {
         this.name = name;
     }
 
-    public void syncPermissions(Set<UUID> permissionIds){
+    public void syncPermissions(Set<UUID> permissionIds) {
 
         this.rolesPermissionsJpaEntityList.removeIf((rolePermissionJpaEntity) -> !permissionIds.contains(rolePermissionJpaEntity.getPermissionId()));
 
@@ -68,6 +68,5 @@ public class RoleJpaEntity extends JpaEntityBaseModel {
                 this.getPermissionIds().stream().map(PermissionId::new).collect(Collectors.toSet())
         );
     }
-
 
 }

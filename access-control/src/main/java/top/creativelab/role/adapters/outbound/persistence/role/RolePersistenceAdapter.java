@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 @Repository
 public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpaEntity, UUID> implements RoleRepository {
 
-    public RolePersistenceAdapter(RoleJpaRepository roleJpaRepository){
+    public RolePersistenceAdapter(RoleJpaRepository roleJpaRepository) {
         super(roleJpaRepository);
     }
 
     @Override
     protected RoleJpaEntity mapToJpaEntity(Role domain) {
 
-        Set<UUID> newPermissionIds = domain.getPermissionSet() != null ?domain.getPermissionSet().stream().map(PermissionId::getValue).collect(Collectors.toSet()) : Collections.emptySet();
+        Set<UUID> newPermissionIds = domain.getPermissionSet() != null ? domain.getPermissionSet().stream().map(PermissionId::getValue).collect(Collectors.toSet()) : Collections.emptySet();
         return new RoleJpaEntity(domain.getId().getValue(), domain.getName(), newPermissionIds);
 
     }
@@ -39,7 +39,7 @@ public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpa
         return repository.findById(roleId.getValue()).map(this::mapToDomain);
     }
 
-    public List<Role> findByName(String name){
+    public List<Role> findByName(String name) {
         return ((RoleJpaRepository) repository).findByNameContainingIgnoreCase(name).stream().map(this::mapToDomain).toList();
     }
 
@@ -54,7 +54,7 @@ public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpa
     }
 
     @Transactional
-    public Role update(Role role){
+    public Role update(Role role) {
 
         RoleJpaEntity modifiedJpaRole = repository.findById(role.getId().getValue()).orElseThrow(() -> new RoleNotFoundException(role.getId().getValue()));
         modifiedJpaRole.updateName(role.getName());
@@ -64,6 +64,5 @@ public class RolePersistenceAdapter extends BasePersistenceAdapter<Role, RoleJpa
 
         return mapToDomain(modifiedJpaRole);
     }
-
 
 }

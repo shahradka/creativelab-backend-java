@@ -30,13 +30,11 @@ public class Role {
         this.permissionSet.addAll(permissionIdSet);
     }
 
-
     public void updateName(String name){
         this.name = name;
     }
 
     public boolean hasAccess(PermissionId permissionId){
-
         if(permissionId == null){
             throw new IllegalArgumentException("PermissionId can not be null");
         }

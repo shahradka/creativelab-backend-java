@@ -47,7 +47,7 @@ public class RoleService implements RoleUseCase {
     }
 
     @Override
-    public void Delete(RoleId roleId) {
+    public void delete(RoleId roleId) {
         if(!repository.isExistById(roleId)){
             throw new RoleNotFoundException(roleId.getValue());
         }
@@ -62,7 +62,7 @@ public class RoleService implements RoleUseCase {
 
     @Override
     public Role findById(RoleId roleId) {
-        return repository.findById(roleId).orElseThrow(()-> new RoleNotFoundException(roleId.getValue()));
+        return repository.findById(roleId).orElseThrow(() -> new RoleNotFoundException(roleId.getValue()));
     }
 
     @Override

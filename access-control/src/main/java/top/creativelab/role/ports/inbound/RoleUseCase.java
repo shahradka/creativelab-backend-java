@@ -10,7 +10,7 @@ import java.util.Set;
 public interface RoleUseCase {
     Role create(String name, Set<PermissionId> permissionIds);
     Role update(RoleId roleId, String name, Set<PermissionId> permissionIds);
-    void Delete(RoleId roleId);
+    void delete(RoleId roleId);
     List<Role> findByName(String name);
     Role findById(RoleId roleId);
     boolean isRoleExistById(RoleId id);

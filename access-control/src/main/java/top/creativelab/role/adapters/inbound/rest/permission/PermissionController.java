@@ -29,7 +29,6 @@ public class PermissionController {
         return permissionUseCase.findAll().stream().map(PermissionResponse::from).toList();
     }
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PermissionResponse getById(@PathVariable @Valid UUID id) {
@@ -41,6 +40,5 @@ public class PermissionController {
     public List<PermissionResponse> getByName(@PathVariable @Valid String name) {
         return permissionUseCase.findByName(name).stream().map(PermissionResponse::from).toList();
     }
-
 
 }

@@ -9,6 +9,7 @@ import top.creativelab.role.ports.inbound.ResourceUseCase;
 import top.creativelab.role.ports.outbound.ResourceRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,7 +40,7 @@ public class ResourcesService implements ResourceUseCase {
     }
 
     public Resource findByName(String name){
-        return repository.findByName(name).orElseThrow(()-> new ResourceNotFoundException(name));
+        return repository.findByName(name).orElseThrow(() -> new ResourceNotFoundException(name));
     }
 
     @Override
@@ -62,6 +63,4 @@ public class ResourcesService implements ResourceUseCase {
         ResourceId resourceId = new ResourceId(id);
         repository.delete(resourceId);
     }
-
-
 }
