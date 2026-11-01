@@ -1,0 +1,41 @@
+type Query {
+    """
+    Returns a page of users, optionally filtered by username, email, first name,
+    last name and status. All filter fields are case-insensitive partial matches,
+    except status which is an exact match.
+    """
+    users(page: Int = 0, size: Int = 20, filter: UserFilterInput): UserPage!
+}
+
+input UserFilterInput {
+    username: String
+    email: String
+    firstname: String
+    lastname: String
+    status: UserStatus
+}
+
+enum UserStatus {
+    PENDING
+    ACTIVE
+    SUSPENDED
+    DELETED
+}
+
+type UserPage {
+    content: [User!]!
+    page: Int!
+    size: Int!
+    totalElements: Int!
+    totalPages: Int!
+}
+
+type User {
+    id: ID!
+    username: String!
+    firstname: String
+    lastname: String
+    email: String
+    birthday: String
+    status: UserStatus!
+}

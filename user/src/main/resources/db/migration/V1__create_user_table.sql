@@ -1,27 +1,13 @@
 CREATE TABLE users
 (
-    id                 BIGSERIAL PRIMARY KEY,
-    name               VARCHAR(255) NOT NULL,
-    users_passwords_id BIGINT       NOT NULL,
-    created_at         TIMESTAMP    NOT NULL,
-    updated_at         TIMESTAMP    NOT NULL,
-
-    CONSTRAINT fk_users_ups FOREIGN KEY (users_passwords_id) REFERENCES users_passwords (id)
+    id          UUID PRIMARY KEY,
+    username    VARCHAR(255) NOT NULL UNIQUE,
+    user_status VARCHAR(255) NOT NULL,
+    password    VARCHAR(255) NOT NULL,
+    firstname   VARCHAR(255),
+    lastname    VARCHAR(255),
+    email       VARCHAR(255),
+    birthday    DATE,
+    created_at  TIMESTAMP    NOT NULL,
+    updated_at  TIMESTAMP    NOT NULL
 );
-
-CREATE TABLE users_passwords
-(
-    id          BIGSERIAL PRIMARY KEY,
-    passwords_id BIGINT NOT NULL,
-    users_id     BIGINT NOT NULL,
-    CONSTRAINT fk_ups_passwords FOREIGN KEY (passwords_id) REFERENCES passwords (id),
-    CONSTRAINT fk_ups_users FOREIGN KEY (users_id) REFERENCES users(id)
-);
-
-CREATE TABLE passwords
-(
-    id         BIGSERIAL PRIMARY KEY,
-    hashed      VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP    NOT NULL,
-    updated_at TIMESTAMP    NOT NULL
-)

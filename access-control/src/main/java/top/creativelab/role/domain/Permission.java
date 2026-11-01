@@ -1,14 +1,9 @@
 package top.creativelab.role.domain;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import top.creativelab.role.domain.vo.ActionId;
 import top.creativelab.role.domain.vo.PermissionId;
 import top.creativelab.role.domain.vo.ResourceId;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 @Value
 public class Permission {

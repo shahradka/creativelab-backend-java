@@ -1,8 +1,6 @@
 package top.creativelab.role.ports.inbound;
 
 import top.creativelab.role.domain.Permission;
-import top.creativelab.role.domain.vo.ActionId;
-import top.creativelab.role.domain.vo.ResourceId;
 
 import java.util.List;
 import java.util.UUID;

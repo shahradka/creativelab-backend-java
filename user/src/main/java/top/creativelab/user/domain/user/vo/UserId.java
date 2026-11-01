@@ -6,9 +6,9 @@ import java.util.UUID;
 
 @Value
 public class UserId {
-    String value;
+    UUID value;
 
     public static UserId newId() {
-        return new UserId(UUID.randomUUID().toString());
+        return new UserId(UUID.randomUUID());
     }
 }

@@ -21,10 +21,10 @@ public class Password {
         return new Password(hashed);
     }
 
-    private static void validate(String raw){
+    public static void validate(String raw){
         if(raw == null  || !raw.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")){
-            throw new IllegalStateException("Wick Password");
-
+            throw new IllegalArgumentException(
+                    "Weak password: must be at least 8 characters and contain upper case, lower case, digit and special character");
         }
     }
 

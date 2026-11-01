@@ -1,6 +1,7 @@
 package top.creativelab.user.adapters.inbound.rest.user;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
-public record ChangePasswordRequest(@NotNull String password) {
+record ChangePasswordRequest(@Valid @NotBlank String newPassword, @Valid String oldPassword) {
 }
