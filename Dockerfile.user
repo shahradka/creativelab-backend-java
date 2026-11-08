@@ -1,0 +1,47 @@
+# syntax=docker/dockerfile:1
+
+# Build context MUST be the repository root:
+#   docker build -f Dockerfile.user -t creativelab-user:local .
+#
+# Cloudflare Containers run linux/amd64 images, so both stages are pinned to
+# that platform. Building on an ARM machine will use emulation and is slower.
+
+# ---- Build stage: GraalVM Native Image ----
+FROM --platform=linux/amd64 ghcr.io/graalvm/native-image-community:25 AS builder
+
+WORKDIR /workspace
+
+RUN microdnf install -y curl gzip tar unzip && microdnf clean all
+
+# Reuse the module's Maven wrapper from the repository root.
+COPY user/mvnw ./mvnw
+COPY user/.mvn ./.mvn
+# Normalize CRLF checkouts (Windows) so the shebang resolves inside Linux.
+RUN chmod +x ./mvnw && sed -i 's/\r$//' ./mvnw
+
+# Copy every POM first so the reactor model is complete.
+COPY pom.xml ./
+COPY common/pom.xml common/pom.xml
+COPY user/pom.xml user/pom.xml
+COPY access-control/pom.xml access-control/pom.xml
+
+# Copy sources and build the native executable.
+COPY common/src common/src
+COPY user/src user/src
+RUN ./mvnw -B -q -pl user -am -Pnative -DskipTests package
+
+# ---- Runtime stage ----
+# Use the same Oracle Linux 9 family as the builder to guarantee glibc
+# compatibility for the dynamically linked native executable.
+FROM --platform=linux/amd64 oraclelinux:9-slim
+
+RUN microdnf install -y zlib ca-certificates libstdc++ && microdnf clean all
+
+WORKDIR /app
+COPY --from=builder /workspace/user/target/user /app/user
+
+ENV LANG=C.UTF-8 \
+    TZ=UTC
+
+EXPOSE 8081
+ENTRYPOINT ["/app/user"]

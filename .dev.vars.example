@@ -1,0 +1,20 @@
+# Copy this file to `.dev.vars` for local `npm run dev`.
+# `.dev.vars` is gitignored and must never be committed.
+#
+# These values are injected into the containers by the Worker. For a local
+# run, point them at your local Postgres (or a tunnel to a managed database).
+
+USER_DB_URL=jdbc:postgresql://localhost:5432/user_db
+USER_DB_USERNAME=postgres
+USER_DB_PASSWORD=postgres
+
+ACCESS_CONTROL_DB_URL=jdbc:postgresql://localhost:5432/access_control_db
+ACCESS_CONTROL_DB_USERNAME=postgres
+ACCESS_CONTROL_DB_PASSWORD=postgres
+
+CORS_ALLOWED_ORIGIN=*
+GRAPHIQL_ENABLED=true
+SPRINGDOC_ENABLED=true
+
+# Optional shared-secret gate. Leave unset to disable.
+# AUTH_TOKEN=change-me

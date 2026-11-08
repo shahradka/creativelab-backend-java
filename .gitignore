@@ -1,2 +1,9 @@
 # Project exclude paths
-/common/target/
+**/target/
+.aider*
+
+# Cloudflare / Node tooling
+/node_modules/
+/.wrangler/
+/.dev.vars
+/cloudflare/.wrangler/

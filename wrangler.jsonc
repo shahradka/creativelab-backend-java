@@ -1,0 +1,64 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "creativelab-api",
+  "main": "cloudflare/src/index.ts",
+  "compatibility_date": "2025-05-05",
+  "observability": {
+    "enabled": true
+  },
+
+  // One container class per Spring Boot service. Both images are built from
+  // the repository root because the Maven reactor needs the parent POM and
+  // the `common` module.
+  "containers": [
+    {
+      "class_name": "UserServiceContainer",
+      "image": "./Dockerfile.user",
+      "image_build_context": ".",
+      "instance_type": "basic",
+      "max_instances": 1
+    },
+    {
+      "class_name": "AccessControlContainer",
+      "image": "./Dockerfile.access-control",
+      "image_build_context": ".",
+      "instance_type": "basic",
+      "max_instances": 1
+    }
+  ],
+
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "USER_SERVICE",
+        "class_name": "UserServiceContainer"
+      },
+      {
+        "name": "ACCESS_CONTROL_SERVICE",
+        "class_name": "AccessControlContainer"
+      }
+    ]
+  },
+
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["UserServiceContainer", "AccessControlContainer"]
+    }
+  ],
+
+  // Non-secret runtime configuration. Replace the placeholders before the
+  // first deploy. Passwords are NOT stored here; create them with:
+  //   npx wrangler secret put USER_DB_PASSWORD
+  //   npx wrangler secret put ACCESS_CONTROL_DB_PASSWORD
+  //   npx wrangler secret put AUTH_TOKEN          (optional)
+  "vars": {
+    "USER_DB_URL": "jdbc:postgresql://ep-summer-mountain-adhsypv9-pooler.c-2.us-east-1.aws.neon.tech/users_db?sslmode=require&channelBinding=require",
+    "USER_DB_USERNAME": "neondb_owner",
+    "ACCESS_CONTROL_DB_URL": "jdbc:postgresql://ep-summer-mountain-adhsypv9-pooler.c-2.us-east-1.aws.neon.tech/auth_service?sslmode=require&channelBinding=require",
+    "ACCESS_CONTROL_DB_USERNAME": "neondb_owner",
+    "CORS_ALLOWED_ORIGIN": "*",
+    "GRAPHIQL_ENABLED": "false",
+    "SPRINGDOC_ENABLED": "false"
+  }
+}

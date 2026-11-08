@@ -1,0 +1,16 @@
+**/target
+**/.mvn/wrapper/maven-wrapper.jar
+.git
+.gitignore
+.idea
+.vscode
+.roo
+.aider*
+plans
+node_modules
+.wrangler
+.dev.vars
+cloudflare
+*.iml
+*.log
+*.md
